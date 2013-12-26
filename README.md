@@ -1,4 +1,4 @@
-farbox-theme-ink
+farbox-themes
 ================
 
-Farbox 主题 Ink
+Farbox 主题
