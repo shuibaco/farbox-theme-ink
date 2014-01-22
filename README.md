@@ -1,4 +1,2 @@
-farbox-templates
+FarBox 主题
 ================
-
-Farbox 模板
