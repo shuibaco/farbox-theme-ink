@@ -1,0 +1,36 @@
+﻿{% extends 'base.html' %}
+{% block title %}关于 | {{ request.args.s or site.title }}{% endblock %}
+
+{% block nav_about %}
+    class="about_current"
+{% endblock %}
+
+{% block content %}
+
+
+<div class="page-post detail-post">
+    <div class="post">
+        <h2 class="title">关于</h2>
+		
+		<div class="info">
+		</div>
+		
+        <div class="post_body">
+		
+			<p>请在此处使用 HTML 添加信息。</p>
+            
+			
+        </div>
+		
+		<div class="pager">
+			<span class="pre unavailable">已是最新一页</span>
+			<a class="next" href="/category">分类</a>
+		</div>
+
+    </div>
+	
+</div>
+
+{% include 'include/paginator.html' %}
+
+{% endblock %}

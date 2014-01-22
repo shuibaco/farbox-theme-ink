@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+
+    <link rel='alternate' type='application/rss+xml' title='atom 1.0' href='/feed' />
+    <title>{% block title %}{{ request.args.s or site.title }} {% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ resource_host }}/lib/pure.css">
+	<link rel="stylesheet" type="text/css" href="/t/css/style.css" />
+	<link rel="shortcut icon" href="/t/favicon.ico" />
+	
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js">
+	</script>
+	
+	
+    {% block head %}
+    {% endblock %}
+
+</head>
+<body>
+
+<div class="pure-g-r" id="layout">
+
+    <div class="sidebar pure-u">
+        <div id="avatar">
+			<a href="/">
+				<img class="logo" src="{{ site.avatar }}" alt="{{ site.title }}" title="返回首页" />
+			</a>
+		</div>
+
+		<h1 class="brand-title"><a href="/"><img src="{{ site.configs.name }}" alt="{{ site.title }}" /></a></h1>
+		
+		<div id="switch"><img src="/t/img/menu.png" alt="menu icon" /></div>
+
+        <ul class="nav">
+            <!--{% if has('images') %}
+            <li> <a href="/album">Albums</a></li>
+            {% endif %}-->
+			<li id="about"><a href="/about"  {% block nav_about %} {% endblock %}>关于</a></li>
+            <li id="category"><a href="/category" {% block nav_cate %} {% endblock %}>分类</a></li>
+            {% if site.tags %}
+            <li id="tags"><a href="/tags" {% block nav_tags %} {% endblock %}>标签</a></li>
+            {% endif %}
+			<li id="archive"><a href="/archive" {% block nav_archive %} {% endblock %}>归档</a></li>
+            <li id="sub"><a href="/subscribe" {% block nav_sub %} {% endblock %}>订阅</a></li>
+			<li id="search">搜索</li>
+			<li id="btt"><a href="#main">置顶</a></li>
+        </ul>
+		
+		<div class="search-bar">
+            <input type="text" id='search-bar' value="{{ request.args.s }}" onkeyup="if (event.keyCode == 13) search();">
+            <a href="javascript:search()">
+                <img src="/t/img/search.png" alt="search icon" />
+            </a>
+        </div>
+
+
+        
+
+    </div>
+
+
+    <div class="pure-u-1">
+        <div id="main">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        {% include 'include/footer.html' %}
+    </div>
+
+
+    
+
+</div>
+
+	<script type="text/javascript">
+	
+		/* search function */
+        function search(){
+            if (document.getElementById('search-bar').value){
+                location.href='http://'+location.host+'?s='+document.getElementById('search-bar').value
+            }
+            else{
+                return false;
+            }
+        }
+    
+		/* search bar toggle */
+		$(document).ready(function(){
+		  $(".sidebar #search").click(function(){
+			$(".sidebar .search-bar").slideToggle("250");
+			$(".sidebar #search").toggleClass("search_current");
+		  });
+		});
+		
+		/* responsive menu */
+		$(document).ready(function(){
+		  $("#switch").click(function(){
+			$(".nav").slideToggle("250");
+			$("#switch").toggleClass("switch_current");
+		  });
+		  $(window).resize(function() {
+			if($(window).width() > 768) 
+			  $(".nav").show();
+			});
+		  $(window).resize(function() {
+			if($(window).width() < 768) 
+			  $(".nav").hide();
+		  });
+		});
+		
+		
+		/* smooth scroll */
+		$(function() {
+		  $('a[href*=#]:not([href=#])').click(function() {
+			if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+			  var target = $(this.hash);
+			  target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+			  if (target.length) {
+				$('html,body').animate({
+				  scrollTop: target.offset().top
+				}, 250);
+				return false;
+			  }
+			}
+		  });
+		});
+		
+		
+	
+	</script>
+	
+	
+    
+
+</body>
+</html>
+
+

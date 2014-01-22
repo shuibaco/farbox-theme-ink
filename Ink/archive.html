@@ -1,0 +1,45 @@
+﻿{% extends 'base.html' %}
+{% block title %}归档 | {{ site.title }}{% endblock %}
+
+{% block nav_archive %}
+    class="archive_current"
+{% endblock %}
+
+{% set total_posts = get_posts(limit=1000, sort='desc') %}
+{% if request.args.use == 'tags' %}
+    {% set entries = tags_with_posts %}
+{% else %}
+    {% set entries = archive %}
+{% endif %}
+
+{% block content %}
+
+
+    <ul class="list_with_title container">
+    {% for year, posts in entries %}
+        <li class="listing_title">{{ year }}</li>
+        <ul class='listing'>
+        {% for post in posts %}
+            <li class="listing-item">
+                <span class="date">{{ post.visits or 0 }} | {{ post.date | date("%m.%d") }}</span>
+                <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+
+    <!--{% include 'include/paginator.html' %}-->
+
+    </ul>
+	
+	<div class="pager">
+			<a class="pre" href="/tags">标签</a>
+			<a class="next" href="/subscribe">订阅</a>
+	</div>
+
+
+
+{% endblock %}
+
+
+

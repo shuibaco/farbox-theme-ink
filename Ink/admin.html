@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% set site = get_site(request.args.site_id) or site %}
+    {% if not is_admin(site) %}
+        {{ redirect_to_login() }}
+    {% endif %}
+    {{ change_role(site.id) }}
+    <meta charset="utf-8">
+    <title>{{ site.title }} - Admin</title>
+
+    <link href="http://resource.farbox.com/css/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <!--[if IE 7]>
+    <link href="http://resource.farbox.com/css/font-awesome/css/font-awesome-ie7.min.css" rel="stylesheet" type="text/css" />
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="{{ resource_host }}/lib/pure.css">
+
+    <link rel="stylesheet" type="text/css" href="{{ resource_host }}/site/css/dashboard.css"/>
+
+    <script type="text/javascript" src="http://resource.farbox.com/lib/jquery/1.8.1-jquery.min.js"></script>
+    <script type="text/javascript" src="http://resource.farbox.com/lib/knockout-2.2.1.js"></script>
+    <script type="text/javascript" src="{{ resource_host }}/site/js/dash.js"></script>
+
+</head>
+<body>
+
+
+<div id="layout" class="pure-g-r">
+    <div class="pure-u" id="menu">
+        <div class="pure-menu pure-menu-open">
+            <a class="pure-menu-heading" target="_blank" data-bind="attr:{href: 'http://'+site().domain}">访问网站</a>
+
+            <ul data-bind="foreach: menus">
+                <li>
+                    <a href="#" data-bind="
+                                click: function(){$parent.click_menu($index())},
+                                css:{'selected': $index()==$parent.current_menu()}">
+                        <i data-bind="css:icon"></i>
+                        <span data-bind="text:title"></span>
+                    </a>
+
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+
+
+<div id="container" class="pure-u">
+
+    <!-- ko if: menus[current_menu()].template -->
+    <div data-bind="template: {name: menus[current_menu()].template}">
+
+    </div>
+    <!-- /ko -->
+
+    <script type="text/html" id="index-template">
+        <div id="logout" class="pure-u">
+            <a href="/logout"><i class="icon-off"></i>登出</a>
+        </div>
+
+        <div class="index">
+            <h1 data-bind="text:site().title"></h1>
+            <ul class="commands-groups" data-bind="foreach: index_command_groups">
+                <li>
+                    <a href="#"
+                       data-bind="click: function(){$parent.current_index_command($index())}, css:{'selected': $index()==$parent.current_index_command()}">
+                        <span data-bind="text: title"></span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="big-commands" data-bind="foreach: index_command_groups">
+                <section data-bind="foreach: commands, visible:$index()==$parent.current_index_command()">
+                    <li>
+                        <a target="_blank" data-bind="attr:{href:href}">
+                            <i data-bind="css:icon"></i>
+                            <span data-bind="text:title"></span>
+                        </a>
+                    </li>
+                </section>
+                <div class="clear"></div>
+            </ul>
+
+
+            <div class="statuses">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>账户</th>
+                        <th>值</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach:account_info">
+                    <tr>
+                        <td data-bind="text:title"></td>
+                        <td data-bind="text:value"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>当前网站</th>
+                        <th>值</th>
+                    </tr>
+                    </thead>
+                    <tbody data-bind="foreach:site_status">
+                    <tr>
+                        <td data-bind="text:title"></td>
+                        <td data-bind="text:value"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="clear"></div>
+            </div>
+
+        </div>
+    </script>
+
+    <script type="text/html" id="setup-template">
+
+        <ul class="site-configs-menu" data-bind="foreach: config_pages">
+            <li>
+                <a href="#"
+                   data-bind="text: $root.get($data, 'title') ,click: function(){$parent.current_config_page($index())}, css:{'selected': $index()==$parent.current_config_page()}"></a>
+            </li>
+        </ul>
+
+        <form class="pure-form pure-form-stacked">
+            <div data-bind="foreach: config_pages">
+                <section data-bind="foreach: groups, visible:$index()==$parent.current_config_page()">
+                    <fieldset>
+                        <legend data-bind="text: $root.get($data, 'title')"></legend>
+                        <div class="fb-group" data-bind="foreach: cells">
+                            <div data-bind="foreach: re_config_parts(parts), attr: {class: 'fb-cell fb-u-'+parts_per_line}">
+                                <div class="fb-u">
+
+                                    <!-- ko if: (model=='text')-->
+                                    <label data-bind="attr:{for: id}, text: title"></label>
+                                    <input data-bind="attr:{id: id, placeholder: default_value }, value:value"
+                                           type="text" class="fb_config">
+                                    <!-- /ko -->
+
+                                    <!-- ko if: model=='select' -->
+                                    <label data-bind="attr:{for: id}, text: title"></label>
+                                    <select data-bind="attr:{id: id}, value: value, options:options, optionsText: 'title', optionsValue: 'value' "
+                                            class="fb_config">
+                                    </select>
+                                    <!-- /ko -->
+
+                                    <!-- ko if: model=='textarea' -->
+                                    <label data-bind="attr:{for: id}, text: title"></label>
+                                    <textarea data-bind="attr:{id: id} , value: value, css:{is_list: is_list}"
+                                              class="fb_config"></textarea>
+                                    <!-- /ko -->
+
+
+                                    <!-- ko if: model=='check' -->
+                                    <input data-bind="attr:{id: id, checked: checked}" type="checkbox"
+                                           class="auto-width fb_config">
+                                    <span data-bind="text: title"></span>
+                                    <!-- /ko -->
+
+                                </div>
+                                <div class="fb-s" data-bind="visible: ($index()+1)%$parent.parts_per_line"></div>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                </section>
+            </div>
+
+            <div class="pure-g-r">
+                <div class="pure-u-1 submit">
+                    <button data-bind="click: save_configs" type="submit"
+                            class="pure-button pure-input-1-2 pure-button-primary">保存设置
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+    </script>
+
+
+    <script type="text/html" id="templates-template">
+        <div class="templates-container">
+            <div class="templates">
+                <select data-bind="
+                    value:current_template_key,
+                    options:template_packages,
+                    optionsText: 'title',
+                    optionsValue: 'template_key',
+                    optionsCaption:'请选择模板...'">
+
+                </select>
+
+                <!-- ko if: current_template_key() && current_template_key()!=site_template_key() -->
+                    <!-- ko if: current_template_key()!='default' -->
+                    <input type="checkbox" id="auto_update_template" data-bind="checked: auto_update_template"/>
+                    <label for="auto_update_template">保持更新</label>
+                    <!-- /ko -->
+                <button class="pure-button pure-button-primary" data-bind="click:use_this_template">使用这个模板</button>
+                <a target="_blank" class="pure-button" data-bind="visible: current_template().source_url, attr:{href: current_template().source_url}">获取源码</a>
+                <!-- /ko -->
+
+                <!-- ko if: current_template_key() -->
+                <span data-bind="if: current_template_key()==site_template_key()">当前正在使用的模板</span>
+                <!-- /ko -->
+
+
+            </div>
+
+
+            <iframe data-bind="attr:{src:'http://'+site().domain+'?template_key='+current_template_key()}"></iframe>
+
+        </div>
+
+    </script>
+
+    <script type="text/html" id="help-template">
+        <div class="full-window full-height">
+            <iframe src="http://help.farbox.com/"></iframe>
+        </div>
+    </script>
+
+    <script type="text/html" id="api-template">
+        <div class="full-window full-height">
+            <iframe src="http://api-beta.farbox.com/"></iframe>
+        </div>
+    </script>
+
+
+    <script type="text/javascript">
+
+        var account = {{ jsonify(get_site_owner_account()) }};
+        var config_pages = {{ jsonify(get_interface(site)) }};
+         var folders = {{ jsonify(get_data(types='folder', path='/', level=1, limit=30, with_page=False))}};
+        var site = {{ jsonify(site) }};
+        var sites = {{ jsonify(get_sites()) }};
+
+
+    </script>
+
+</div>
+
+
+</div>
+
+
+</body>
+</html>

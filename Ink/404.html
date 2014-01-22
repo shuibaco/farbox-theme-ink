@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}404 | {{ request.args.s or site.title }}{% endblock %}
+
+{% block content %}
+
+
+<div class="page-post detail-post">
+    <div class="post">
+        <h2 class="title">对不起，您访问的页面不存在。</h2>
+		
+		<div class="info">
+		</div>
+		
+        <div class="post_body">
+			<p>您可以尝试搜索：</p>
+			<div class="search-bar">
+				<input type="text" id='search-bar' value="{{ request.args.s }}" onkeyup="if (event.keyCode == 13) search();">
+				<a href="javascript:search()">
+					<img src="/t/img/search.png" alt="search icon" />
+				</a>
+			</div>
+        </div>
+		
+		<div class="pager">
+			<a class="pre" href="/">返回首页</a>
+			<a class="next unavailable" href="http://help.farbox.com/">帮助文档</a>
+		</div>
+
+    </div>
+	
+</div>
+<script type="text/javascript">
+		<!-- search function -->
+        function search(){
+            if (document.getElementById('search-bar').value){
+                location.href='http://'+location.host+'?s='+document.getElementById('search-bar').value
+            }
+            else{
+                return false;
+            }
+        }
+</script>
+
+{% include 'include/paginator.html' %}
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} | {{ site.title }}{% endblock %}
+
+
+
+{% block content %}
+
+<div class="detail-post">
+    <div class="post">
+        <h2 class="title">{{ post.title }}</h2>
+
+		<div class="info">
+		    <span class="date">
+                {{ post.date | date('%Y.%m.%d %H:%M %a') }}
+            </span>
+			|
+            <span class="visitors">
+                {{ post.visits or 0 }}次阅读
+            </span>
+		    |
+            <span class="tags">
+            {% if post.tags %}
+                {% for tag in post.tags %}
+	            <a href="/tags/{{ tag }}">{{ tag }}</a>
+                {% endfor %}
+			{% else %}
+				无分类
+            {% endif %}
+			</span>
+			<!--|
+			<a href="#add-comment">添加评论</a>-->
+			|
+			<span class="permalink"><a href="{{ post.url }}">
+				固定链接
+            </a></span>
+			|
+			<span class="source"><a href="{{ post.url }}?action=show_raw" target="_blank">
+                源码
+            </a></span>
+			<!--|
+            <div class="g-plusone" data-size="medium"></div>
+
+            <div class="fb-like" data-send="false" data-layout="button_count" data-width="30" data-show-faces="true" data-font="arial"></div>-->
+
+	    </div>
+		
+        <div class="post_body">
+            {{ post.content }}
+        </div>
+		
+		
+		<div class="other_posts">
+                {% if pre_one %}
+                    <a href="/post/{{ pre_one.url_path }}" class="pre" title="新一篇">{{ pre_one.title }}</a>
+				{% else %}
+					<span class="pre unavailable">已是最新一篇</span>
+                {% endif %}
+                {% if next_one %}
+                    <a href="/post/{{ next_one.url_path }}" class="next" title="旧一篇">{{ next_one.title }}</a>
+				{% else %}
+					<span class="next unavailable">已是最后一篇</span>
+                {% endif %}
+        </div>
+
+		<!--<div id="add-comment" onClick="javascript:changeText()">
+			显示评论
+		</div>-->
+
+        <script type="text/javascript">
+		(function() {
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		})();
+
+		$(document).ready(function(){
+		  $("#add-comment").click(function(){
+			$("#disqus_thread").slideToggle("250");
+			$("#add-comment").toggleClass("comment-open");
+		  });
+		});
+		
+		function changeText() {
+			var element = document.getElementById('add-comment');
+			if (element.innerHTML === '隐藏评论') element.innerHTML = '显示评论';
+			else {
+				element.innerHTML = '隐藏评论';
+			}
+		}
+		</script>
+
+
+
+<!--    <script>(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>-->
+
+    </div>
+
+	{% include 'include/comments.html' %}
+	
+	
+</div>
+
+    {{ site.configs.scripts_for_post }}
+{% endblock %}
