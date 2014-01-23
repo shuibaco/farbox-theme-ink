@@ -44,7 +44,7 @@ code{
 }
 pre{
     border: 1px solid #e0e0e0;
-    margin: 0;
+    margin: 0 0 1em;
     padding: 5px 15px;
     font-family: consolas,Courier,monospace,serif;
     line-height: 1.5em;
@@ -69,6 +69,7 @@ pre code{
     background: none;
     padding: 0;
     margin: 0;
+	font-size: 100%;
 }
 p {
 	
@@ -724,7 +725,7 @@ background:url('/t/img/eof.png') no-repeat center;
 width: 100%;
 }
 .post_body {
-max-width: 600px;
+width: 100%;
 margin: 0 auto;
 }
 .post_body a, .other_posts a {
