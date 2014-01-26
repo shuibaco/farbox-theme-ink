@@ -27,6 +27,8 @@ block content
 					add_doc_actions(post)
 				else
 					raise_404
+			elif not request.path.startswith('/post/')
+				raise_404
 
 			h2.title= post.title
 			.info
