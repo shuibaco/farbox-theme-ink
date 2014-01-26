@@ -69,29 +69,6 @@ block content
 				elif pre_one
 					span.next.unavailable 已是最后一篇
 
-
-			script(type="text/javascript")
-				(function() {
-				var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-				po.src = 'https://apis.google.com/js/plusone.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-				})();
-
-				$(document).ready(function(){
-				  $("#add-comment").click(function(){
-					$("#disqus_thread").slideToggle("250");
-					$("#add-comment").toggleClass("comment-open");
-				  });
-				});
-
-				function changeText() {
-					var element = document.getElementById('add-comment');
-					if (element.innerHTML === '隐藏评论') element.innerHTML = '显示评论';
-					else {
-						element.innerHTML = '隐藏评论';
-					}
-				}
-
 			comments = get_comments(post)
 			comment_allowed = is_comment_allowed(post)
 			include include.comments
