@@ -8,6 +8,8 @@
 
 请直接下载后放入 FarBox 文件夹内。
 
+在线预览：http://theme-ink.farbox.com/
+
 ## 重写版 (jade)
 
 1. 直接在 FarBox 后台选择
@@ -25,7 +27,3 @@
 评论框100%宽度，在移动设备上留出更多空间。样式按照博客整体风格进行了修改。
 - **代码**  
 参照 Github 定义了 `code` 和 `pre` 样式。
-
-# 在线预览
-
-http://theme-ink.farbox.com/
