@@ -1,3 +1,5 @@
+![screenshot](https://raw.githubusercontent.com/shuibaco/farbox-theme-ink/master/screenshot.jpg)
+
 # 写在前面
 
 此模板已由官方重写，由于模板图片较多的原因，重写版与此版有些出入，特此告知。
